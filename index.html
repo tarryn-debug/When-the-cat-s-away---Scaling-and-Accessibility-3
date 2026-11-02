@@ -1063,9 +1063,12 @@
         card.style.top = Math.max(top, em) + 'px';
         card.style.bottom = 'auto';
       } else if (spotlightContainer.classList.contains('turkey-layout')) {
-        /* Turkey uses the bottom 21% position matching the original design */
-        card.style.top = 'auto';
-        card.style.bottom = '21%';
+        /* Turkey: the card's top sits just below the circle's centre (as in the
+           original design), so the wedge looks the same whatever the text size.
+           Scales with the container width; clamped to stay inside the frame. */
+        const tTop = Math.min(cy - 0.025 * app.offsetWidth, app.offsetHeight - em - card.offsetHeight);
+        card.style.setProperty('top', Math.max(tTop, em) + 'px', 'important');
+        card.style.setProperty('bottom', 'auto', 'important');
       } else {
         /* every other card is centred vertically in the interactive */
         card.style.top = Math.max(em, (app.offsetHeight - card.offsetHeight) / 2) + 'px';
