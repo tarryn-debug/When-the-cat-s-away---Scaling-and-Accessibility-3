@@ -991,7 +991,7 @@
         body: "In 2014, China started constructing artificial islands in the South China Sea. These islands have been transformed into military facilities, projecting China’s military power in the disputed maritime region and pushing back against the US naval presence in the western Pacific. The US and its allies have seen this as destabilising and intimidating.",
         mapImg: "Resources/PastedVector-32.svg",
         highlightId: "hl-southchina",
-        layoutClass: "layout-left zoom-map card-wider"
+        layoutClass: "layout-left zoom-map card-wider southchina-layout"
       }
     };
 
@@ -1069,10 +1069,12 @@
         const tTop = Math.min(cy - 0.025 * app.offsetWidth, app.offsetHeight - em - card.offsetHeight);
         card.style.setProperty('top', Math.max(tTop, em) + 'px', 'important');
         card.style.setProperty('bottom', 'auto', 'important');
-      } else if (spotlightContainer.classList.contains('indiachina-layout')) {
-        /* India-China: the card's top sits level with the circle's centre (as in
-           the original design). Scales with the container; clamped to stay inside. */
-        const iTop = Math.min(cy - 0.004 * app.offsetWidth, app.offsetHeight - em - card.offsetHeight);
+      } else if (spotlightContainer.classList.contains('indiachina-layout') || spotlightContainer.classList.contains('southchina-layout')) {
+        /* India-China and South China Sea: the card's top sits level with the
+           circle's centre (as in the original design). Scales with the
+           container; clamped to stay inside. */
+        const lift = spotlightContainer.classList.contains('southchina-layout') ? 0.007 : 0.004;
+        const iTop = Math.min(cy - lift * app.offsetWidth, app.offsetHeight - em - card.offsetHeight);
         card.style.top = Math.max(iTop, em) + 'px';
         card.style.bottom = 'auto';
       } else {
@@ -1083,8 +1085,9 @@
 
       const r = circle.offsetWidth / 2 - 1;
       const p2 = [card.offsetLeft + card.offsetWidth, card.offsetTop + card.offsetHeight];
-      /* Turkey and India-China always use the top-left-corner wedge, regardless of card height */
-      const cardAboveCircle = !spotlightContainer.classList.contains('turkey-layout') && !spotlightContainer.classList.contains('indiachina-layout') && card.offsetTop < cy - r;
+      /* Turkey, India-China and South China Sea always use the top-left-corner wedge, regardless of card height */
+      const forceTopLeft = ['turkey-layout', 'indiachina-layout', 'southchina-layout'].some(c => spotlightContainer.classList.contains(c));
+      const cardAboveCircle = !forceTopLeft && card.offsetTop < cy - r;
       let p1, t1;
       
       if (cardAboveCircle) {
