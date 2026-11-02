@@ -504,6 +504,15 @@
       transition: none !important;
     }
 
+    .spotlight-view-container.layout-left.turkey-layout .dialog-card {
+      position: absolute;
+      left: 6.7%;
+      bottom: 21% !important;
+      top: auto !important;
+      width: 43%;
+      max-width: none;
+    }
+
     .spotlight-view-container.layout-left.card-wide .dialog-card {
       width: 45%;
       bottom: 16%;
@@ -945,7 +954,7 @@
         body: "In October 2019, Turkey launched an attack in northern Syria, shortly after Donald Trump announced the withdrawal of US troops. This withdrawal left the Syrian Democratic Forces and the Kurds, its main allies in its battle against the Islamic State, without US military support. Turkey claimed the attack was an attempt to prevent a “terror corridor” along its southern border.",
         mapImg: "Resources/PastedVector-37.svg",
         highlightId: "hl-turkey",
-        layoutClass: "layout-left zoom-map"
+        layoutClass: "layout-left zoom-map turkey-layout"
       },
       syria: {
         title: "Obama’s “red line” in Syria",
@@ -1051,6 +1060,10 @@
         let top = Math.min(cy - 0.17 * circle.offsetWidth, app.offsetHeight - em - card.offsetHeight);
         card.style.top = Math.max(top, em) + 'px';
         card.style.bottom = 'auto';
+      } else if (spotlightContainer.classList.contains('turkey-layout')) {
+        /* Turkey uses the original bottom anchor */
+        card.style.top = 'auto';
+        card.style.bottom = '21%';
       } else {
         /* every other card is centred vertically in the interactive */
         card.style.top = Math.max(em, (app.offsetHeight - card.offsetHeight) / 2) + 'px';
