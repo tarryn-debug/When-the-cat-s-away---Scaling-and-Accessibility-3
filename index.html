@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>When the cat's away</title>
   
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
   <style>
@@ -507,9 +507,10 @@
     .spotlight-view-container.layout-left.turkey-layout .dialog-card {
       position: absolute;
       left: 6.7%;
-      width: 44.5%;
+      bottom: 21% !important;
+      top: auto !important;
+      width: 43%;
       max-width: none;
-      bottom: auto;
     }
 
     .spotlight-view-container.layout-left.card-wide .dialog-card {
@@ -735,7 +736,7 @@
     .close-card-btn { top: calc(20 * var(--u)); right: calc(20 * var(--u)); width: calc(36 * var(--u)); height: calc(36 * var(--u)); font-size: calc(20 * var(--u)); }
 
     .spotlight-view-container.layout-left .dialog-card { width: 43%; }
-    .spotlight-view-container.layout-left.turkey-layout .dialog-card { width: 44.5%; }
+    .spotlight-view-container.layout-left.turkey-layout .dialog-card { width: 43%; }
     .spotlight-view-container.layout-left.card-wide .dialog-card { width: 45%; }
     .spotlight-view-container.layout-left.card-wider .dialog-card { width: 52.5%; }
 
@@ -763,7 +764,7 @@
       .dialog-card { width: 95%; padding: 1.25rem; }
       .spotlight-circle-frame { width: 90px; height: 90px; }
       .spotlight-view-container.layout-left .dialog-card { width: 90%; left: 5%; }
-      .spotlight-view-container.layout-left.turkey-layout .dialog-card,
+      .spotlight-view-container.layout-left.turkey-layout .dialog-card { width: 90%; left: 5%; bottom: 10% !important; }
       .spotlight-view-container.layout-left.card-wide .dialog-card,
       .spotlight-view-container.layout-left.card-wider .dialog-card { width: 90%; }
       .biblio-card { width: 95%; max-height: 85%; padding: 1.25rem; }
@@ -1062,10 +1063,9 @@
         card.style.top = Math.max(top, em) + 'px';
         card.style.bottom = 'auto';
       } else if (spotlightContainer.classList.contains('turkey-layout')) {
-        /* Turkey: top edge of card aligns cleanly with the middle of the circle, matching Image 1 */
-        let top = Math.min(cy - 0.08 * circle.offsetWidth, app.offsetHeight - em - card.offsetHeight);
-        card.style.top = Math.max(top, em) + 'px';
-        card.style.bottom = 'auto';
+        /* Turkey uses the exact bottom anchor from the design (bottom 21%) */
+        card.style.top = 'auto';
+        card.style.bottom = '21%';
       } else {
         /* every other card is centred vertically in the interactive */
         card.style.top = Math.max(em, (app.offsetHeight - card.offsetHeight) / 2) + 'px';
@@ -1077,11 +1077,7 @@
       const cardAboveCircle = card.offsetTop < cy - r;
       let p1, t1;
       
-      if (spotlightContainer.classList.contains('turkey-layout')) {
-        // Turkey: top wedge line leaves top-right corner of card and touches the top of the circle
-        p1 = [card.offsetLeft + card.offsetWidth, card.offsetTop];
-        t1 = tangentPoints(p1[0], p1[1], cx, cy, r).sort((a, b) => a[1] - b[1])[0];
-      } else if (cardAboveCircle) {
+      if (cardAboveCircle) {
         p1 = [card.offsetLeft + card.offsetWidth, card.offsetTop];
         if (spotlightContainer.classList.contains('wedge-outer')) {
           t1 = tangentPoints(p1[0], p1[1], cx, cy, r).sort((a, b) => b[0] - a[0])[0];
@@ -1090,6 +1086,7 @@
           t1 = [cx - vx / vd * r, cy - vy / vd * r];
         }
       } else {
+        // Turkey, Georgia, India-China: wedge leaves the card's top-left corner and touches the circle's upper tangent
         p1 = [card.offsetLeft, card.offsetTop];
         t1 = tangentPoints(p1[0], p1[1], cx, cy, r).sort((a, b) => a[1] - b[1])[0];
       }
