@@ -984,7 +984,7 @@
         body: "Tensions have been high between these two countries over the contours of their borders for almost half a century. With China’s growing brazenness, things escalated in 2020 when the Indian and Chinese armies clashed at the Galwan Valley, resulting in the brutal killing of 20 Indian soldiers. China claimed that the clash was a reaction to Indian forces carrying out illegal activities.",
         mapImg: "Resources/PastedVector-33.svg",
         highlightId: "hl-indiachina",
-        layoutClass: "layout-left zoom-map card-wide"
+        layoutClass: "layout-left zoom-map card-wide indiachina-layout"
       },
       southchina: {
         title: "Islands in the South China Sea",
@@ -1069,6 +1069,12 @@
         const tTop = Math.min(cy - 0.025 * app.offsetWidth, app.offsetHeight - em - card.offsetHeight);
         card.style.setProperty('top', Math.max(tTop, em) + 'px', 'important');
         card.style.setProperty('bottom', 'auto', 'important');
+      } else if (spotlightContainer.classList.contains('indiachina-layout')) {
+        /* India-China: the card's top sits level with the circle's centre (as in
+           the original design). Scales with the container; clamped to stay inside. */
+        const iTop = Math.min(cy - 0.004 * app.offsetWidth, app.offsetHeight - em - card.offsetHeight);
+        card.style.top = Math.max(iTop, em) + 'px';
+        card.style.bottom = 'auto';
       } else {
         /* every other card is centred vertically in the interactive */
         card.style.top = Math.max(em, (app.offsetHeight - card.offsetHeight) / 2) + 'px';
@@ -1077,8 +1083,8 @@
 
       const r = circle.offsetWidth / 2 - 1;
       const p2 = [card.offsetLeft + card.offsetWidth, card.offsetTop + card.offsetHeight];
-      /* Turkey always uses the top-left-corner wedge, regardless of card height */
-      const cardAboveCircle = !spotlightContainer.classList.contains('turkey-layout') && card.offsetTop < cy - r;
+      /* Turkey and India-China always use the top-left-corner wedge, regardless of card height */
+      const cardAboveCircle = !spotlightContainer.classList.contains('turkey-layout') && !spotlightContainer.classList.contains('indiachina-layout') && card.offsetTop < cy - r;
       let p1, t1;
       
       if (cardAboveCircle) {
