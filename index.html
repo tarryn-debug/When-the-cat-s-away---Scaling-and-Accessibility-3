@@ -1074,7 +1074,8 @@
 
       const r = circle.offsetWidth / 2 - 1;
       const p2 = [card.offsetLeft + card.offsetWidth, card.offsetTop + card.offsetHeight];
-      const cardAboveCircle = card.offsetTop < cy - r;
+      /* Turkey always uses the top-left-corner wedge, regardless of card height */
+      const cardAboveCircle = !spotlightContainer.classList.contains('turkey-layout') && card.offsetTop < cy - r;
       let p1, t1;
       
       if (cardAboveCircle) {
