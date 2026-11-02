@@ -1099,7 +1099,9 @@
       const tip = getPinTipCoordinates(pin, app);
       const size = circle.offsetWidth || 132;
       const cx = tip.x - (0.508 - 0.5) * size;
-      const beamTop = beam.getBoundingClientRect().top - app.getBoundingClientRect().top;
+      const beamRect = beam.getBoundingClientRect();
+      const appRect = app.getBoundingClientRect();
+      const beamTop = beamRect.height > 0 ? (beamRect.top - appRect.top) : (app.clientHeight * 0.33);
 
       circle.style.setProperty('--cx', cx + 'px');
       circle.style.setProperty('--cy', beamTop + 'px');
@@ -1173,6 +1175,7 @@
       const card = document.querySelector('.dialog-card');
       const stack = document.getElementById('spotlight-stack');
       const beam = document.getElementById('spotlight-beam');
+      const circle = document.getElementById('spotlight-circle');
       const isLeft = spotlightContainer.classList.contains('layout-left');
 
       clearScroll();
@@ -1203,7 +1206,8 @@
         const grow = baseBeamTop - beam.getBoundingClientRect().top;
         const shift = Math.max(0, Math.min(grow, slack));
         if (shift > 0) stack.style.transform = 'translateY(' + shift + 'px)';
-        const beamTop = beam.getBoundingClientRect().top - app.getBoundingClientRect().top;
+        const beamRect = beam.getBoundingClientRect();
+        const beamTop = beamRect.top - a.top;
         circle.style.setProperty('--cy', beamTop + 'px');
       }
     }
@@ -1283,8 +1287,8 @@
           spotlightContainer.className = "spotlight-view-container " + (data.layoutClass || "");
 
           activePin = e.currentTarget;
-          fitAndAlign(activePin);
           contentModal.classList.add('active');
+          fitAndAlign(activePin);
           e.currentTarget.classList.add('viewed');
           viewedMap.add(id);
         }
